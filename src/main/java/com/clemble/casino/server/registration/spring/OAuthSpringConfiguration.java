@@ -24,29 +24,4 @@ public class OAuthSpringConfiguration implements SpringConfiguration {
 
     }
 
-//    @Configuration
-//    @Import(value = { SecurityCouchbaseSpringConfiguration.class, JsonSpringConfiguration.class })
-//    public static class CouchbaseOAuthSpringConfiguration implements SpringConfiguration {
-//
-//        @Autowired
-//        public CouchbaseClient securityCouchbaseClient;
-//
-//        @Autowired
-//        public TokenRepository tokenRepository;
-//
-//        @Autowired
-//        @Qualifier("objectMapper")
-//        public ObjectMapper objectMapper;
-//
-//        @Bean
-//        public ClembleOAuthProviderTokenServices clembleOAuthProviderTokenService() {
-//            return new ClembleOAuthProviderTokenServices(tokenRepository);
-//        }
-//
-//        @Bean
-//        public ClembleCouchbaseConsumerDetailsService clembleConsumerDetailsService() {
-//            return new ClembleCouchbaseConsumerDetailsService(securityCouchbaseClient, objectMapper);
-//        }
-//
-//    }
 }
