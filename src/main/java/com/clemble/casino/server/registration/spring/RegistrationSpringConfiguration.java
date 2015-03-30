@@ -1,6 +1,5 @@
 package com.clemble.casino.server.registration.spring;
 
-import com.clemble.casino.error.ClembleCasinoValidationService;
 import com.clemble.casino.registration.PlayerCredential;
 import com.clemble.casino.server.key.SafeKeyFactory;
 import com.clemble.casino.server.player.notification.SystemNotificationService;
@@ -13,11 +12,11 @@ import com.clemble.casino.server.registration.service.PasswordResetTokenGenerato
 import com.clemble.casino.server.registration.service.PasswordResetTokenService;
 import com.clemble.casino.server.registration.service.ServerPlayerCredentialManager;
 import com.clemble.casino.server.registration.service.UUIDPasswordResetTokenGenerator;
-import com.clemble.casino.server.security.PlayerTokenFactory;
 import com.clemble.casino.server.registration.repository.ServerPlayerCredentialRepository;
 import com.clemble.casino.server.registration.security.ClembleConsumerDetailsService;
 import com.clemble.casino.server.registration.security.SimpleClembleConsumerDetailsService;
 import com.clemble.casino.server.security.PlayerTokenUtils;
+import com.clemble.casino.server.spring.WebCommonSpringConfiguration;
 import com.clemble.casino.server.spring.common.CommonSpringConfiguration;
 import com.clemble.casino.server.spring.common.MongoSpringConfiguration;
 import com.clemble.casino.server.spring.common.RedisSpringConfiguration;
@@ -26,6 +25,13 @@ import com.clemble.casino.server.spring.PlayerTokenSpringConfiguration;
 import com.clemble.casino.server.registration.controller.PlayerRegistrationController;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
+import org.springframework.boot.autoconfigure.mustache.MustacheAutoConfiguration;
+import org.springframework.boot.autoconfigure.orm.jpa.HibernateJpaAutoConfiguration;
+import org.springframework.boot.autoconfigure.web.DispatcherServletAutoConfiguration;
+import org.springframework.boot.autoconfigure.web.EmbeddedServletContainerAutoConfiguration;
+import org.springframework.boot.autoconfigure.web.ServerPropertiesAutoConfiguration;
+import org.springframework.boot.autoconfigure.web.WebMvcAutoConfiguration;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
@@ -44,7 +50,30 @@ import java.security.NoSuchAlgorithmException;
  * Created by mavarazy on 7/4/14.
  */
 @Configuration
-@Import({CommonSpringConfiguration.class, OAuthSpringConfiguration.class, PlayerTokenSpringConfiguration.class, RedisSpringConfiguration.class, MongoSpringConfiguration.class, RegistrationSpringConfiguration.Default.class, RegistrationSpringConfiguration.Cloud.class})
+//   DispatcherServletAutoConfiguration
+//      - @ConditionalOnClass classes found: org.springframework.web.servlet.DispatcherServlet (OnClassCondition)
+//      - found web application StandardServletEnvironment (OnWebApplicationCondition)
+//
+//   DispatcherServletAutoConfiguration.DispatcherServletConfiguration
+//      - @ConditionalOnClass classes found: javax.servlet.ServletRegistration (OnClassCondition)
+//      - no ServletRegistrationBean found (DispatcherServletAutoConfiguration.DefaultDispatcherServletCondition)
+//
+//   EmbeddedServletContainerAutoConfiguration
+//@EnableAutoConfiguration(exclude = {MustacheAutoConfiguration.class, HibernateJpaAutoConfiguration.class})
+@Import({
+    ServerPropertiesAutoConfiguration.class,
+    DispatcherServletAutoConfiguration.class,
+    EmbeddedServletContainerAutoConfiguration.class,
+    WebCommonSpringConfiguration.class,
+
+    CommonSpringConfiguration.class,
+
+    OAuthSpringConfiguration.class,
+    PlayerTokenSpringConfiguration.class,
+    RedisSpringConfiguration.class,
+    MongoSpringConfiguration.class,
+    RegistrationSpringConfiguration.Default.class,
+    RegistrationSpringConfiguration.Cloud.class})
 public class RegistrationSpringConfiguration implements SpringConfiguration {
 
     @Bean

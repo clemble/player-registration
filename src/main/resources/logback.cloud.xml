@@ -32,21 +32,16 @@
         </syslogConfig>
     </appender>
 
-    <appender name="LE" class="com.logentries.logback.LogentriesAppender">
-        <Debug>False</Debug>
-        <Token>274a52ba-e313-4a8b-bccb-1b6565f77bdc</Token>
-        <Ssl>False</Ssl>
-        <facility>USER</facility>
-        <logID>registration</logID>
-        <layout>
-            <pattern>%d{HH:mm:ss.SSS} [%thread] %-5level %logger{36} - %msg%n</pattern>
-        </layout>
+    <appender name="STDOUT" class="ch.qos.logback.core.ConsoleAppender">
+        <encoder>
+            <pattern>%-4relative [%thread] %-5level %logger{35} - %msg %n</pattern>
+        </encoder>
     </appender>
 
     <root level="DEBUG">
-        <appender-ref ref="LE" />
         <appender-ref ref="FILE" />
         <appender-ref ref="SYSLOG-UDP" />
+        <appender-ref ref="STDOUT" />
     </root>
 
 </configuration>

@@ -6,7 +6,6 @@ import org.springframework.stereotype.Repository;
 
 import com.clemble.casino.registration.PlayerCredential;
 
-@Repository()
 public interface ServerPlayerCredentialRepository extends MongoRepository<ServerPlayerCredential, String> {
 
     public ServerPlayerCredential findByEmail(String email);
