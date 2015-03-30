@@ -4,9 +4,9 @@
     <modelVersion>4.0.0</modelVersion>
 
     <parent>
-        <groupId>org.springframework.boot</groupId>
-        <artifactId>spring-boot-starter-parent</artifactId>
-        <version>1.2.2.RELEASE</version>
+        <groupId>com.clemble.casino.server</groupId>
+        <artifactId>server</artifactId>
+        <version>0.17.0-SNAPSHOT</version>
     </parent>
 
     <groupId>com.clemble.casino.server</groupId>
@@ -33,7 +33,6 @@
             <groupId>org.springframework.data</groupId>
             <artifactId>spring-data-mongodb</artifactId>
         </dependency>
-
         <dependency>
             <groupId>org.springframework.data</groupId>
             <artifactId>spring-data-redis</artifactId>
@@ -41,6 +40,10 @@
         <dependency>
             <groupId>redis.clients</groupId>
             <artifactId>jedis</artifactId>
+        </dependency>
+         <dependency>
+            <groupId>com.couchbase.client</groupId>
+            <artifactId>couchbase-client</artifactId>
         </dependency>
 
         <dependency>
