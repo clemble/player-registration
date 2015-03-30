@@ -10,8 +10,8 @@ import org.springframework.test.context.web.WebAppConfiguration;
 /**
  * Created by mavarazy on 7/4/14.
  */
-@RunWith(SpringJUnit4ClassRunner.class)
 @WebAppConfiguration
+@RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(classes = { RegistrationSpringConfiguration.class })
 public class RegistrationSpringConfigurationTest {
 

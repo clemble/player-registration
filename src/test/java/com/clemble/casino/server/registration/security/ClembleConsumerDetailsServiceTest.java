@@ -22,8 +22,10 @@ import com.clemble.casino.security.ClembleConsumerDetails;
 import com.clemble.casino.server.registration.spring.OAuthSpringConfiguration;
 import com.clemble.test.random.AbstractValueGenerator;
 import com.clemble.test.random.ObjectGenerator;
+import org.springframework.test.context.web.WebAppConfiguration;
 
 @Ignore
+@WebAppConfiguration
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(classes = OAuthSpringConfiguration.class)
 public class ClembleConsumerDetailsServiceTest {
