@@ -50,16 +50,6 @@ import java.security.NoSuchAlgorithmException;
  * Created by mavarazy on 7/4/14.
  */
 @Configuration
-//   DispatcherServletAutoConfiguration
-//      - @ConditionalOnClass classes found: org.springframework.web.servlet.DispatcherServlet (OnClassCondition)
-//      - found web application StandardServletEnvironment (OnWebApplicationCondition)
-//
-//   DispatcherServletAutoConfiguration.DispatcherServletConfiguration
-//      - @ConditionalOnClass classes found: javax.servlet.ServletRegistration (OnClassCondition)
-//      - no ServletRegistrationBean found (DispatcherServletAutoConfiguration.DefaultDispatcherServletCondition)
-//
-//   EmbeddedServletContainerAutoConfiguration
-//@EnableAutoConfiguration(exclude = {MustacheAutoConfiguration.class, HibernateJpaAutoConfiguration.class})
 @Import({
     ServerPropertiesAutoConfiguration.class,
     DispatcherServletAutoConfiguration.class,
