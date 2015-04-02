@@ -51,11 +51,6 @@ import java.security.NoSuchAlgorithmException;
  */
 @Configuration
 @Import({
-    ServerPropertiesAutoConfiguration.class,
-    DispatcherServletAutoConfiguration.class,
-    EmbeddedServletContainerAutoConfiguration.class,
-    WebCommonSpringConfiguration.class,
-
     CommonSpringConfiguration.class,
 
     OAuthSpringConfiguration.class,
