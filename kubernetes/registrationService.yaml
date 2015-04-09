@@ -1,0 +1,11 @@
+id: registration
+kind: Service
+apiVersion: v1beta1
+selector:
+  name: registration
+containerPort: 10000
+protocol: TCP
+port: 80
+publicIPs:
+  - "104.155.21.115"
+createExternalLoadBalancer: true

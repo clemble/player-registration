@@ -1,0 +1,25 @@
+kind: ReplicationController
+id: registration-controller
+apiVersion: v1beta1
+desiredState:
+  replicas: 1
+  replicaSelector: 
+    name: registration
+    version: v1
+  podTemplate:
+    labels:
+      name : registration
+      version: v1
+    desiredState:
+      manifest:
+        containers:
+          - name: registration
+            image: clemble/registration:latest
+            imagePullPolicy : PullAlways
+            ports:
+              - containerPort: 10000
+                hostPort: 10000
+                protocol: TCP
+            labels:
+              name : registration
+              version: v1
