@@ -5,7 +5,7 @@ import com.clemble.casino.server.key.SafeKeyFactory;
 import com.clemble.casino.server.player.notification.SystemNotificationService;
 import com.clemble.casino.server.registration.PlayerKeyGenerator;
 import com.clemble.casino.server.registration.ServerPlayerCredential;
-import com.clemble.casino.server.registration.controller.PlayerPasswordResetServiceController;
+import com.clemble.casino.server.registration.controller.PlayerPasswordServiceController;
 import com.clemble.casino.server.registration.controller.PlayerSignOutServiceController;
 import com.clemble.casino.server.registration.repository.ServerPasswordResetTokenRepository;
 import com.clemble.casino.server.registration.service.PasswordResetTokenGenerator;
@@ -16,7 +16,6 @@ import com.clemble.casino.server.registration.repository.ServerPlayerCredentialR
 import com.clemble.casino.server.registration.security.ClembleConsumerDetailsService;
 import com.clemble.casino.server.registration.security.SimpleClembleConsumerDetailsService;
 import com.clemble.casino.server.security.PlayerTokenUtils;
-import com.clemble.casino.server.spring.WebCommonSpringConfiguration;
 import com.clemble.casino.server.spring.common.CommonSpringConfiguration;
 import com.clemble.casino.server.spring.common.MongoSpringConfiguration;
 import com.clemble.casino.server.spring.common.RedisSpringConfiguration;
@@ -25,13 +24,6 @@ import com.clemble.casino.server.spring.PlayerTokenSpringConfiguration;
 import com.clemble.casino.server.registration.controller.PlayerRegistrationController;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
-import org.springframework.boot.autoconfigure.mustache.MustacheAutoConfiguration;
-import org.springframework.boot.autoconfigure.orm.jpa.HibernateJpaAutoConfiguration;
-import org.springframework.boot.autoconfigure.web.DispatcherServletAutoConfiguration;
-import org.springframework.boot.autoconfigure.web.EmbeddedServletContainerAutoConfiguration;
-import org.springframework.boot.autoconfigure.web.ServerPropertiesAutoConfiguration;
-import org.springframework.boot.autoconfigure.web.WebMvcAutoConfiguration;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
@@ -117,11 +109,11 @@ public class RegistrationSpringConfiguration implements SpringConfiguration {
     }
 
     @Bean
-    public PlayerPasswordResetServiceController passwordResetServiceController(
+    public PlayerPasswordServiceController passwordResetServiceController(
         PasswordResetTokenService tokenService,
         ServerPlayerCredentialManager credentialManager
     ) {
-        return new PlayerPasswordResetServiceController(tokenService, credentialManager);
+        return new PlayerPasswordServiceController(tokenService, credentialManager);
     }
 
     @Bean

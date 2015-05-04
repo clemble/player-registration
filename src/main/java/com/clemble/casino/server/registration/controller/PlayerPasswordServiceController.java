@@ -3,16 +3,13 @@ package com.clemble.casino.server.registration.controller;
 import com.clemble.casino.WebMapping;
 import com.clemble.casino.error.ClembleCasinoError;
 import com.clemble.casino.error.ClembleCasinoException;
+import com.clemble.casino.registration.PlayerPasswordChangeRequest;
 import com.clemble.casino.registration.PlayerPasswordResetRequest;
 import com.clemble.casino.registration.PlayerPasswordRestoreRequest;
-import com.clemble.casino.registration.service.PlayerPasswordResetService;
+import com.clemble.casino.registration.service.PlayerPasswordService;
 import com.clemble.casino.server.registration.service.PasswordResetTokenService;
 import com.clemble.casino.server.registration.service.ServerPlayerCredentialManager;
-import org.springframework.validation.annotation.Validated;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 
@@ -22,14 +19,14 @@ import static com.clemble.casino.registration.RegistrationWebMapping.*;
  * Created by mavarazy on 2/2/15.
  */
 @RestController
-public class PlayerPasswordResetServiceController implements PlayerPasswordResetService {
+public class PlayerPasswordServiceController implements PlayerPasswordService {
 
     final private PasswordResetTokenService tokenService;
     final private ServerPlayerCredentialManager credentialManager;
 
-    public PlayerPasswordResetServiceController(
-        PasswordResetTokenService tokenService,
-        ServerPlayerCredentialManager credentialManager) {
+    public PlayerPasswordServiceController(
+            PasswordResetTokenService tokenService,
+            ServerPlayerCredentialManager credentialManager) {
         this.tokenService = tokenService;
         this.credentialManager = credentialManager;
     }
@@ -61,6 +58,21 @@ public class PlayerPasswordResetServiceController implements PlayerPasswordReset
             // Case 2. Player or token illegal
             return false;
         }
+    }
+
+    @Override
+    public boolean change(@Valid @RequestBody PlayerPasswordChangeRequest changeRequest) {
+        throw new UnsupportedOperationException();
+    }
+
+
+    @RequestMapping(method = RequestMethod.POST, value = CHANGE_PASSWORD, produces = WebMapping.PRODUCES)
+    public boolean change(@CookieValue("player") String player, @Valid @RequestBody PlayerPasswordChangeRequest changeRequest) {
+        // Step 1. Verifying password matches
+        if (!credentialManager.verifyByPassword(player, changeRequest.getPassword()))
+            throw ClembleCasinoException.fromError(ClembleCasinoError.PasswordIncorrect);
+        // Step 2. Updating password
+        return credentialManager.update(player, changeRequest.getPassword()) != null;
     }
 
 }
