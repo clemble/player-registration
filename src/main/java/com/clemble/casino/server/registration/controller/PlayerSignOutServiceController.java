@@ -3,6 +3,8 @@ package com.clemble.casino.server.registration.controller;
 import com.clemble.casino.registration.RegistrationWebMapping;
 import com.clemble.casino.registration.service.PlayerSignOutService;
 import com.clemble.casino.server.security.PlayerTokenUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
@@ -15,6 +17,8 @@ import java.io.IOException;
  */
 @RestController
 public class PlayerSignOutServiceController implements PlayerSignOutService {
+
+    final private Logger LOG = LoggerFactory.getLogger(PlayerSignOutServiceController.class);
 
     final private String host;
     final private PlayerTokenUtils tokenUtils;
@@ -30,11 +34,17 @@ public class PlayerSignOutServiceController implements PlayerSignOutService {
     }
 
     @RequestMapping(method = RequestMethod.GET, value = RegistrationWebMapping.REGISTRATION_SIGN_OUT)
-    public void signOut(HttpServletResponse signOut) throws IOException {
+    public void signOut(HttpServletResponse signOut) {
         // Step 1. Removing cookies
         tokenUtils.signOut(signOut);
         // Step 2. Redirect to parent
-        signOut.sendRedirect(host);
+        try {
+            signOut.sendRedirect(host);
+        } catch (IOException e) {
+            // This is wrapped in order to prevent log filtering in papertrail
+            LOG.error("Error, while sending redirect", e);
+            throw new RuntimeException(e);
+        }
     }
 
 }
