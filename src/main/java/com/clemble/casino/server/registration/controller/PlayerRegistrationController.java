@@ -48,7 +48,7 @@ public class PlayerRegistrationController implements PlayerRegistrationService, 
 
     @Override
     public PlayerLoginRequest login(PlayerLoginRequest loginRequest) {
-        String player = credentialManager.verifyByEmail(loginRequest.getEmailOrNickName(), loginRequest.getPassword());
+        String player = credentialManager.verifyByEmailOrNickName(loginRequest.getEmailOrNickName(), loginRequest.getPassword());
         // Step 1. Checking password match
         if (player == null)
             throw ClembleCasinoException.fromError(ClembleCasinoError.EmailOrPasswordIncorrect);

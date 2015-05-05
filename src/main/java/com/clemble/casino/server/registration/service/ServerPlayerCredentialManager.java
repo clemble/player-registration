@@ -48,7 +48,7 @@ public class ServerPlayerCredentialManager {
         return credentialRepository.save(newCredentials);
     }
 
-    public String verifyByEmail(String emailOrNickName, String password) {
+    public String verifyByEmailOrNickName(String emailOrNickName, String password) {
         // Step 1. Looking up player credentials
         ServerPlayerCredential playerCredential = credentialRepository.findByEmailOrNickName(emailOrNickName, emailOrNickName);
         // Step 2. Checking password matches
@@ -63,9 +63,14 @@ public class ServerPlayerCredentialManager {
 
     public boolean verifyByPassword(String player, String password) {
         // Step 1. Looking up player credentials
-        ServerPlayerCredential playerCredential = credentialRepository.findOne(player);
+        ServerPlayerCredential credentials = credentialRepository.findOne(player);
         // Step 2. Checking password matches
-        return playerCredential != null && passwordEncoder.matches(password, playerCredential.getHash());
+        if (password == null && credentials == null)
+            return true;
+        else
+            return password != null &&
+                    credentials != null &&
+                    passwordEncoder.matches(password, credentials.getHash());
     }
 
     public String findPlayerByEmail(String email) {

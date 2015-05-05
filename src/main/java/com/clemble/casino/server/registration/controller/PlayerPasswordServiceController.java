@@ -69,7 +69,8 @@ public class PlayerPasswordServiceController implements PlayerPasswordService {
     @RequestMapping(method = RequestMethod.POST, value = CHANGE_PASSWORD, produces = WebMapping.PRODUCES)
     public boolean change(@CookieValue("player") String player, @Valid @RequestBody PlayerPasswordChangeRequest changeRequest) {
         // Step 1. Verifying password matches
-        if (!credentialManager.verifyByPassword(player, changeRequest.getPassword()))
+        boolean passwordMatch = credentialManager.verifyByPassword(player, changeRequest.getOldPassword());
+        if (!passwordMatch)
             throw ClembleCasinoException.fromError(ClembleCasinoError.PasswordIncorrect);
         // Step 2. Updating password
         return credentialManager.update(player, changeRequest.getPassword()) != null;
