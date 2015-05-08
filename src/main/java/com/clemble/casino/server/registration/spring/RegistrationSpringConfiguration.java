@@ -5,7 +5,7 @@ import com.clemble.casino.server.key.SafeKeyFactory;
 import com.clemble.casino.server.player.notification.SystemNotificationService;
 import com.clemble.casino.server.registration.PlayerKeyGenerator;
 import com.clemble.casino.server.registration.ServerPlayerCredential;
-import com.clemble.casino.server.registration.controller.PlayerPasswordServiceController;
+import com.clemble.casino.server.registration.controller.PlayerPasswordController;
 import com.clemble.casino.server.registration.controller.PlayerSignOutController;
 import com.clemble.casino.server.registration.repository.ServerPasswordResetTokenRepository;
 import com.clemble.casino.server.registration.service.PasswordResetTokenGenerator;
@@ -109,11 +109,11 @@ public class RegistrationSpringConfiguration implements SpringConfiguration {
     }
 
     @Bean
-    public PlayerPasswordServiceController passwordResetServiceController(
+    public PlayerPasswordController passwordResetServiceController(
         PasswordResetTokenService tokenService,
         ServerPlayerCredentialManager credentialManager
     ) {
-        return new PlayerPasswordServiceController(tokenService, credentialManager);
+        return new PlayerPasswordController(tokenService, credentialManager);
     }
 
     @Bean

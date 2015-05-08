@@ -19,12 +19,12 @@ import static com.clemble.casino.registration.RegistrationWebMapping.*;
  * Created by mavarazy on 2/2/15.
  */
 @RestController
-public class PlayerPasswordServiceController implements PlayerPasswordService {
+public class PlayerPasswordController implements PlayerPasswordService {
 
     final private PasswordResetTokenService tokenService;
     final private ServerPlayerCredentialManager credentialManager;
 
-    public PlayerPasswordServiceController(
+    public PlayerPasswordController(
             PasswordResetTokenService tokenService,
             ServerPlayerCredentialManager credentialManager) {
         this.tokenService = tokenService;
