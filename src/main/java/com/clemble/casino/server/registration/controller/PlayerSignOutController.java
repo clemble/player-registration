@@ -2,6 +2,7 @@ package com.clemble.casino.server.registration.controller;
 
 import com.clemble.casino.registration.RegistrationWebMapping;
 import com.clemble.casino.registration.service.PlayerSignOutService;
+import com.clemble.casino.server.ExternalController;
 import com.clemble.casino.server.security.PlayerTokenUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -16,7 +17,7 @@ import java.io.IOException;
  * Created by mavarazy on 1/14/15.
  */
 @RestController
-public class PlayerSignOutController implements PlayerSignOutService {
+public class PlayerSignOutController implements PlayerSignOutService, ExternalController {
 
     final private Logger LOG = LoggerFactory.getLogger(PlayerSignOutController.class);
 
