@@ -6,7 +6,7 @@ import com.clemble.casino.server.player.notification.SystemNotificationService;
 import com.clemble.casino.server.registration.PlayerKeyGenerator;
 import com.clemble.casino.server.registration.ServerPlayerCredential;
 import com.clemble.casino.server.registration.controller.PlayerPasswordServiceController;
-import com.clemble.casino.server.registration.controller.PlayerSignOutServiceController;
+import com.clemble.casino.server.registration.controller.PlayerSignOutController;
 import com.clemble.casino.server.registration.repository.ServerPasswordResetTokenRepository;
 import com.clemble.casino.server.registration.service.PasswordResetTokenGenerator;
 import com.clemble.casino.server.registration.service.PasswordResetTokenService;
@@ -102,10 +102,10 @@ public class RegistrationSpringConfiguration implements SpringConfiguration {
     }
 
     @Bean
-    public PlayerSignOutServiceController playerSignOutServiceController(
+    public PlayerSignOutController playerSignOutServiceController(
         @Value("${clemble.registration.token.host}") String host,
         PlayerTokenUtils tokenUtils) {
-        return new PlayerSignOutServiceController("http://" + host.substring(1), tokenUtils);
+        return new PlayerSignOutController("http://" + host.substring(1), tokenUtils);
     }
 
     @Bean

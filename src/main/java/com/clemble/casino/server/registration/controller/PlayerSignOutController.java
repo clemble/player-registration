@@ -16,14 +16,14 @@ import java.io.IOException;
  * Created by mavarazy on 1/14/15.
  */
 @RestController
-public class PlayerSignOutServiceController implements PlayerSignOutService {
+public class PlayerSignOutController implements PlayerSignOutService {
 
-    final private Logger LOG = LoggerFactory.getLogger(PlayerSignOutServiceController.class);
+    final private Logger LOG = LoggerFactory.getLogger(PlayerSignOutController.class);
 
     final private String host;
     final private PlayerTokenUtils tokenUtils;
 
-    public PlayerSignOutServiceController(String host, PlayerTokenUtils tokenUtils) {
+    public PlayerSignOutController(String host, PlayerTokenUtils tokenUtils) {
         this.host = host;
         this.tokenUtils = tokenUtils;
     }
