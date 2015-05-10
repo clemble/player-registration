@@ -19,7 +19,7 @@ import com.clemble.casino.error.ClembleCasinoError;
 import com.clemble.casino.error.ClembleCasinoException;
 import com.clemble.casino.player.PlayerProfile;
 import com.clemble.casino.registration.PlayerRegistrationRequest;
-import com.clemble.casino.server.ExternalController;
+import com.clemble.casino.server.ServerController;
 import com.clemble.casino.server.player.notification.SystemNotificationService;
 import com.clemble.casino.WebMapping;
 
@@ -27,7 +27,7 @@ import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
 
 @RestController
-public class PlayerRegistrationController implements PlayerRegistrationService, ExternalController {
+public class PlayerRegistrationController implements PlayerRegistrationService, ServerController {
     // !!!TODO need a safe restoration process for all Registrations not only for login!!!
 
     final private PlayerTokenUtils tokenUtils;

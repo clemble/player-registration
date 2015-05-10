@@ -7,7 +7,7 @@ import com.clemble.casino.registration.PlayerPasswordChangeRequest;
 import com.clemble.casino.registration.PlayerPasswordResetRequest;
 import com.clemble.casino.registration.PlayerPasswordRestoreRequest;
 import com.clemble.casino.registration.service.PlayerPasswordService;
-import com.clemble.casino.server.ExternalController;
+import com.clemble.casino.server.ServerController;
 import com.clemble.casino.server.registration.service.PasswordResetTokenService;
 import com.clemble.casino.server.registration.service.ServerPlayerCredentialManager;
 import org.springframework.web.bind.annotation.*;
@@ -20,7 +20,7 @@ import static com.clemble.casino.registration.RegistrationWebMapping.*;
  * Created by mavarazy on 2/2/15.
  */
 @RestController
-public class PlayerPasswordController implements PlayerPasswordService, ExternalController {
+public class PlayerPasswordController implements PlayerPasswordService, ServerController {
 
     final private PasswordResetTokenService tokenService;
     final private ServerPlayerCredentialManager credentialManager;
