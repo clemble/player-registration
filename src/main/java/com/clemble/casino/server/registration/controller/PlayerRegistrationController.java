@@ -81,13 +81,17 @@ public class PlayerRegistrationController implements PlayerRegistrationService, 
         PlayerProfile normalizedProfile = registrationRequest.toProfileWithPlayer(player);
         if (credentialManager.existsByNickname(normalizedProfile.getNickName()))
             throw ClembleCasinoException.fromError(ClembleCasinoError.NickOccupied);
-        // Step 4. Registration done through separate registration service
-        register(player, registrationRequest.getEmail(), normalizedProfile.getNickName(), registrationRequest.getPassword());
-        // Step 5. Notifying system of new user
+        // Step 4. Create new credentials
+        credentialManager.save(player, registrationRequest.getEmail(), normalizedProfile.getNickName(), registrationRequest.getPassword());
+        // Step 5. Generating default image redirect
+        String imageRedirect = GravatarService.toRedirect(registrationRequest.getEmail());
+        notificationService.send(new SystemPlayerImageChangedEvent(player, imageRedirect, imageRedirect + "?s=48"));
+
+        // Step 6. Notifying system of new user
         notificationService.send(new SystemPlayerProfileRegisteredEvent(player, normalizedProfile));
-        // Step 5.1. Creating email added event
+        // Step 7.1. Creating email added event
         notificationService.send(new SystemEmailAddedEvent(player, registrationRequest.getEmail(), false));
-        // Step 6. All done returning response
+        // Step 8. All done returning response
         return registrationRequest.copyWithPlayer(player);
     }
 
@@ -96,18 +100,6 @@ public class PlayerRegistrationController implements PlayerRegistrationService, 
     public PlayerRegistrationRequest httpRegister(@Valid @RequestBody final PlayerRegistrationRequest registrationRequest, HttpServletResponse response) {
         PlayerRegistrationRequest player = register(registrationRequest);
         tokenUtils.updateResponse(player.getPlayer(), response);
-        return player;
-    }
-
-    public String register(final String player, String email, final String nickName, String password) {
-        // Step 1. Create new credentials
-        credentialManager.save(player, email, nickName, password);
-        // Step 2. Generating default image redirect
-        String imageRedirect = GravatarService.toRedirect(email);
-        notificationService.send(new SystemPlayerImageChangedEvent(player, imageRedirect, imageRedirect + "?s=48"));
-        // Step 2.1 Specifying player type
-        // TODO move to registration listener playerProfile.setType(PlayerType.free);
-        // Step 4. Returning generated player token
         return player;
     }
 
