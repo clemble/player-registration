@@ -53,20 +53,9 @@ public class ServerPlayerCredentialManager {
         // Step 1. Looking up player credentials
         ServerPlayerCredential playerCredential = credentialRepository.findByEmail(credential.getEmail());
         // Step 2. Checking player matches
-        return passwordEncoder.matches(credential.getPassword(), playerCredential.getHash()) ? playerCredential.getPlayer() : null;
-    }
-
-    public String verifyByEmailOrNickName(String emailOrNickName, String password) {
-        // Step 1. Looking up player credentials
-        ServerPlayerCredential playerCredential = credentialRepository.findByEmailOrNickName(emailOrNickName, emailOrNickName);
-        // Step 2. Checking password matches
-        if (playerCredential != null && passwordEncoder.matches(password, playerCredential.getHash())) {
-            // Case 1. Matches return player
-            return playerCredential.getPlayer();
-        } else {
-            // Case 2. Does not match return null
-            return null;
-        }
+        return playerCredential == null
+            ? null
+            : passwordEncoder.matches(credential.getPassword(), playerCredential.getHash()) ? playerCredential.getPlayer() : null;
     }
 
     public boolean verifyByPassword(String player, String password) {
