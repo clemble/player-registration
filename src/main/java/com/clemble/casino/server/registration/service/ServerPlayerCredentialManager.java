@@ -1,5 +1,6 @@
 package com.clemble.casino.server.registration.service;
 
+import com.clemble.casino.registration.PlayerCredential;
 import com.clemble.casino.server.registration.ServerPlayerCredential;
 import com.clemble.casino.server.registration.repository.ServerPlayerCredentialRepository;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -48,6 +49,13 @@ public class ServerPlayerCredentialManager {
         return credentialRepository.save(newCredentials);
     }
 
+    public String verifyByCredentials(PlayerCredential credential) {
+        // Step 1. Looking up player credentials
+        ServerPlayerCredential playerCredential = credentialRepository.findByEmail(credential.getEmail());
+        // Step 2. Checking player matches
+        return passwordEncoder.matches(credential.getPassword(), playerCredential.getHash()) ? playerCredential.getPlayer() : null;
+    }
+
     public String verifyByEmailOrNickName(String emailOrNickName, String password) {
         // Step 1. Looking up player credentials
         ServerPlayerCredential playerCredential = credentialRepository.findByEmailOrNickName(emailOrNickName, emailOrNickName);
@@ -82,5 +90,13 @@ public class ServerPlayerCredentialManager {
 
     public boolean existsByNickname(String nickName) {
         return credentialRepository.findByNickName(nickName) != null;
+    }
+
+    private String verify(ServerPlayerCredential credentials, String password) {
+        if (credentials == null) {
+            return password == null ? credentials.getPlayer() : null;
+        } else {
+            return passwordEncoder.matches(password, credentials.getHash()) ? credentials.getPlayer() : null;
+        }
     }
 }

@@ -2,7 +2,6 @@ package com.clemble.casino.server.registration.security;
 
 import com.clemble.casino.player.PlayerProfile;
 import com.clemble.casino.registration.PlayerCredential;
-import com.clemble.casino.registration.PlayerLoginRequest;
 import com.clemble.casino.registration.PlayerRegistrationRequest;
 import com.clemble.casino.server.registration.controller.PlayerRegistrationController;
 import com.clemble.casino.server.registration.repository.ServerPlayerCredentialRepository;
@@ -36,12 +35,13 @@ public class PlayerCredentialsTest {
         PlayerProfile profile = new PlayerProfile();
         PlayerRegistrationRequest registrationRequest = PlayerRegistrationRequest.create(credential, profile);
         // Step 2. Processing RegistrationController
-        String createdPlayer = registrationController.register(registrationRequest).getPlayer();
+        String createdPlayer = registrationController.register(registrationRequest);
         // Step 3. Checking password was not saved as plain text
         Assert.assertNotEquals(credentialRepository.findOne(createdPlayer), credential.getPassword());
         // Step 4. Checking can login with Credentials
-        PlayerLoginRequest logInPlayer = registrationController.login(new PlayerLoginRequest(null, "me@me.me", "1234567"));
+        String player = registrationController.login(credential);
         // Step 5. Checking we can login with old credentials and player will be same
-        Assert.assertEquals(logInPlayer.getPlayer(), createdPlayer);
+        Assert.assertEquals(player, createdPlayer);
     }
+
 }

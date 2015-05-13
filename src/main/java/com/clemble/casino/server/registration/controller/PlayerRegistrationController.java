@@ -3,7 +3,7 @@ package com.clemble.casino.server.registration.controller;
 import static com.clemble.casino.registration.RegistrationWebMapping.*;
 import static com.google.common.base.Preconditions.checkNotNull;
 
-import com.clemble.casino.registration.PlayerLoginRequest;
+import com.clemble.casino.registration.PlayerCredential;
 import com.clemble.casino.registration.service.PlayerRegistrationService;
 import com.clemble.casino.server.event.email.SystemEmailAddedEvent;
 import com.clemble.casino.server.event.player.SystemPlayerImageChangedEvent;
@@ -47,33 +47,34 @@ public class PlayerRegistrationController implements PlayerRegistrationService, 
     }
 
     @Override
-    public PlayerLoginRequest login(PlayerLoginRequest loginRequest) {
-        String player = credentialManager.verifyByEmailOrNickName(loginRequest.getEmailOrNickName(), loginRequest.getPassword());
-        // Step 1. Checking password match
+    public String login(PlayerCredential loginRequest) {
+        // Step 1. Processing login request
+        String player = credentialManager.verifyByCredentials(loginRequest);
         if (player == null)
             throw ClembleCasinoException.fromError(ClembleCasinoError.EmailOrPasswordIncorrect);
-        // Step 4. Everything is fine, return Identity
-        return new PlayerLoginRequest(player, loginRequest.getEmailOrNickName(), loginRequest.getPassword());
+        return player;
     }
 
     @RequestMapping(method = RequestMethod.POST, value = REGISTRATION_LOGIN, produces = WebMapping.PRODUCES)
     @ResponseStatus(value = HttpStatus.OK)
-    public PlayerLoginRequest httpLogin(@Valid @RequestBody PlayerLoginRequest playerCredentials, HttpServletResponse response) {
-        PlayerLoginRequest loginResponse = login(playerCredentials);
-        tokenUtils.updateResponse(loginResponse.getPlayer(), response);
-        return loginResponse;
+    public String httpLogin(@Valid @RequestBody PlayerCredential loginRequest, HttpServletResponse response) {
+        // Step 1. Processing login request
+        String player = login(loginRequest);
+        // Step 2. Updating HttpResponse
+        tokenUtils.updateResponse(player, response);
+        return player;
     }
 
     @Override
-    public PlayerRegistrationRequest register(final PlayerRegistrationRequest registrationRequest) {
+    public String register(final PlayerRegistrationRequest registrationRequest) {
         // Step 1.1 Checking user not already exists
         String registeredPlayer = credentialManager.findPlayerByEmail(registrationRequest.getEmail());
         if (registeredPlayer != null) {
-            PlayerLoginRequest loginRequest = new PlayerLoginRequest(registrationRequest.getEmail(), registrationRequest.getPassword());
+            PlayerCredential credentials = registrationRequest.toCredentials();
             // Step 1.2. Verify password matches
-            String player = login(loginRequest).getPlayer();
+            String player = login(credentials);
             // Step 1.3. Returning validated profile
-            return registrationRequest.copyWithPlayer(player);
+            return player;
         }
         // Step 2. Creating appropriate PlayerProfile
         String player = playerKeyGenerator.generate();
@@ -92,14 +93,14 @@ public class PlayerRegistrationController implements PlayerRegistrationService, 
         // Step 7.1. Creating email added event
         notificationService.send(new SystemEmailAddedEvent(player, registrationRequest.getEmail(), false));
         // Step 8. All done returning response
-        return registrationRequest.copyWithPlayer(player);
+        return player;
     }
 
     @RequestMapping(method = RequestMethod.POST, value = REGISTRATION_PROFILE, produces = WebMapping.PRODUCES)
     @ResponseStatus(value = HttpStatus.CREATED)
-    public PlayerRegistrationRequest httpRegister(@Valid @RequestBody final PlayerRegistrationRequest registrationRequest, HttpServletResponse response) {
-        PlayerRegistrationRequest player = register(registrationRequest);
-        tokenUtils.updateResponse(player.getPlayer(), response);
+    public String httpRegister(@Valid @RequestBody final PlayerRegistrationRequest registrationRequest, HttpServletResponse response) {
+        String player = register(registrationRequest);
+        tokenUtils.updateResponse(player, response);
         return player;
     }
 
