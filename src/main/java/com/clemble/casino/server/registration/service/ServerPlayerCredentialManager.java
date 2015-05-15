@@ -81,6 +81,10 @@ public class ServerPlayerCredentialManager {
         return credentialRepository.findByNickName(nickName) != null;
     }
 
+    public boolean existsByEmail(String email) {
+        return credentialRepository.findByEmail(email) != null;
+    }
+
     private String verify(ServerPlayerCredential credentials, String password) {
         if (credentials == null) {
             return password == null ? credentials.getPlayer() : null;

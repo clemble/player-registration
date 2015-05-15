@@ -90,7 +90,8 @@ public class RegistrationSpringConfiguration implements SpringConfiguration {
 
     @Bean
     public ServerPlayerCredentialManager credentialManager(PasswordEncoder passwordEncoder, ServerPlayerCredentialRepository credentialRepository) {
-        return new ServerPlayerCredentialManager(passwordEncoder, credentialRepository);
+        ServerPlayerCredentialManager credentialManager = new ServerPlayerCredentialManager(passwordEncoder, credentialRepository);
+        return credentialManager;
     }
 
     @Bean

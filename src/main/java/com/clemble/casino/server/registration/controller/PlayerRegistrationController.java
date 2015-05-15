@@ -3,6 +3,7 @@ package com.clemble.casino.server.registration.controller;
 import static com.clemble.casino.registration.RegistrationWebMapping.*;
 import static com.google.common.base.Preconditions.checkNotNull;
 
+import com.clemble.casino.error.ClembleCasinoFailure;
 import com.clemble.casino.registration.PlayerCredential;
 import com.clemble.casino.registration.service.PlayerRegistrationService;
 import com.clemble.casino.server.event.email.SystemEmailAddedEvent;
@@ -47,11 +48,17 @@ public class PlayerRegistrationController implements PlayerRegistrationService, 
     }
 
     @Override
-    public String login(PlayerCredential loginRequest) {
+    public String login(PlayerCredential credentials) {
+        if (!credentialManager.existsByEmail(credentials.getEmail())){
+            ClembleCasinoFailure failure = ClembleCasinoFailure.withFieldError("email", ClembleCasinoError.EmailNotRegistered);
+            throw ClembleCasinoException.fromDescription(failure);
+        }
         // Step 1. Processing login request
-        String player = credentialManager.verifyByCredentials(loginRequest);
-        if (player == null)
-            throw ClembleCasinoException.fromError(ClembleCasinoError.EmailOrPasswordIncorrect);
+        String player = credentialManager.verifyByCredentials(credentials);
+        if (player == null) {
+            ClembleCasinoFailure failure = ClembleCasinoFailure.withFieldError("password", ClembleCasinoError.PasswordIncorrect);
+            throw ClembleCasinoException.fromDescription(failure);
+        }
         return player;
     }
 
