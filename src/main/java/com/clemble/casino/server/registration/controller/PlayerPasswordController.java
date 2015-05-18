@@ -1,8 +1,8 @@
 package com.clemble.casino.server.registration.controller;
 
 import com.clemble.casino.WebMapping;
-import com.clemble.casino.error.ClembleCasinoError;
-import com.clemble.casino.error.ClembleCasinoException;
+import com.clemble.casino.error.ClembleErrorCode;
+import com.clemble.casino.error.ClembleException;
 import com.clemble.casino.registration.PlayerPasswordChangeRequest;
 import com.clemble.casino.registration.PlayerPasswordResetRequest;
 import com.clemble.casino.registration.PlayerPasswordRestoreRequest;
@@ -39,7 +39,7 @@ public class PlayerPasswordController implements PlayerPasswordService, ServerCo
         String player = credentialManager.findPlayerByEmail(restoreRequest.getEmail());
         // Step 2. Checking player does exists
         if (player == null)
-            throw ClembleCasinoException.fromError(ClembleCasinoError.EmailInvalid);
+            throw ClembleException.fromError(ClembleErrorCode.EmailInvalid);
         // Step 3. Generate and send email token
         tokenService.generateAndSend(player);
         // Step 4. Consider that everything done
@@ -72,7 +72,7 @@ public class PlayerPasswordController implements PlayerPasswordService, ServerCo
         // Step 1. Verifying password matches
         boolean passwordMatch = credentialManager.verifyByPassword(player, changeRequest.getOldPassword());
         if (!passwordMatch)
-            throw ClembleCasinoException.fromError(ClembleCasinoError.PasswordIncorrect);
+            throw ClembleException.fromError(ClembleErrorCode.PasswordIncorrect);
         // Step 2. Updating password
         return credentialManager.update(player, changeRequest.getPassword()) != null;
     }

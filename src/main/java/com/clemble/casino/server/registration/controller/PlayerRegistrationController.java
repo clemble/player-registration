@@ -3,7 +3,7 @@ package com.clemble.casino.server.registration.controller;
 import static com.clemble.casino.registration.RegistrationWebMapping.*;
 import static com.google.common.base.Preconditions.checkNotNull;
 
-import com.clemble.casino.error.ClembleCasinoFailure;
+import com.clemble.casino.error.ClembleError;
 import com.clemble.casino.registration.PlayerCredential;
 import com.clemble.casino.registration.service.PlayerRegistrationService;
 import com.clemble.casino.server.event.email.SystemEmailAddedEvent;
@@ -16,8 +16,8 @@ import com.clemble.casino.server.security.PlayerTokenUtils;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
-import com.clemble.casino.error.ClembleCasinoError;
-import com.clemble.casino.error.ClembleCasinoException;
+import com.clemble.casino.error.ClembleErrorCode;
+import com.clemble.casino.error.ClembleException;
 import com.clemble.casino.player.PlayerProfile;
 import com.clemble.casino.registration.PlayerRegistrationRequest;
 import com.clemble.casino.server.ServerController;
@@ -50,14 +50,14 @@ public class PlayerRegistrationController implements PlayerRegistrationService, 
     @Override
     public String login(PlayerCredential credentials) {
         if (!credentialManager.existsByEmail(credentials.getEmail())){
-            ClembleCasinoFailure failure = ClembleCasinoFailure.withFieldError("email", ClembleCasinoError.EmailNotRegistered);
-            throw ClembleCasinoException.fromDescription(failure);
+            ClembleError failure = ClembleError.withFieldError("email", ClembleErrorCode.EmailNotRegistered);
+            throw ClembleException.fromDescription(failure);
         }
         // Step 1. Processing login request
         String player = credentialManager.verifyByCredentials(credentials);
         if (player == null) {
-            ClembleCasinoFailure failure = ClembleCasinoFailure.withFieldError("password", ClembleCasinoError.PasswordIncorrect);
-            throw ClembleCasinoException.fromDescription(failure);
+            ClembleError failure = ClembleError.withFieldError("password", ClembleErrorCode.PasswordIncorrect);
+            throw ClembleException.fromDescription(failure);
         }
         return player;
     }
@@ -88,7 +88,7 @@ public class PlayerRegistrationController implements PlayerRegistrationService, 
         // Step 3. Adding initial fields to PlayerProfile
         PlayerProfile normalizedProfile = registrationRequest.toProfileWithPlayer(player);
         if (credentialManager.existsByNickname(normalizedProfile.getNickName()))
-            throw ClembleCasinoException.fromError(ClembleCasinoError.NickOccupied);
+            throw ClembleException.fromError(ClembleErrorCode.NickOccupied);
         // Step 4. Create new credentials
         credentialManager.save(player, registrationRequest.getEmail(), normalizedProfile.getNickName(), registrationRequest.getPassword());
         // Step 5. Generating default image redirect
