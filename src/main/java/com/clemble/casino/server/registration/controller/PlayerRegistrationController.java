@@ -88,7 +88,7 @@ public class PlayerRegistrationController implements PlayerRegistrationService, 
         // Step 3. Adding initial fields to PlayerProfile
         PlayerProfile normalizedProfile = registrationRequest.toProfileWithPlayer(player);
         if (credentialManager.existsByNickname(normalizedProfile.getNickName()))
-            throw ClembleException.fromError(ClembleErrorCode.NickOccupied);
+            throw ClembleException.fromDescription(ClembleError.withFieldError("nickName", ClembleErrorCode.NickOccupied));
         // Step 4. Create new credentials
         credentialManager.save(player, registrationRequest.getEmail(), normalizedProfile.getNickName(), registrationRequest.getPassword());
         // Step 5. Generating default image redirect
