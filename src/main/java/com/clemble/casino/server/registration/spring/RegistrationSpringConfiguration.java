@@ -132,10 +132,6 @@ public class RegistrationSpringConfiguration implements SpringConfiguration {
             notificationService);
     }
 
-    @Bean
-    public PasswordResetTokenGenerator passwordResetTokenGenerator() {
-        return new UUIDPasswordResetTokenGenerator();
-    }
 
     @Bean
     public ServerPasswordResetTokenRepository serverPasswordResetTokenRepository(MongoRepositoryFactory mongoRepositoryFactory) {
@@ -151,6 +147,11 @@ public class RegistrationSpringConfiguration implements SpringConfiguration {
             return Encryptors.noOpText();
         }
 
+        @Bean
+        public PasswordResetTokenGenerator passwordResetTokenGenerator() {
+            return new UUIDPasswordResetTokenGenerator();
+        }
+
     }
 
     @Configuration
@@ -163,6 +164,11 @@ public class RegistrationSpringConfiguration implements SpringConfiguration {
             @Value("${clemble.password.encryptor.salt}") String salt
         ) {
             return Encryptors.queryableText(password, salt);
+        }
+
+        @Bean
+        public PasswordResetTokenGenerator passwordResetTokenGenerator() {
+            return new UUIDPasswordResetTokenGenerator();
         }
 
     }

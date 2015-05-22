@@ -3,7 +3,6 @@ package com.clemble.casino.server.registration.controller;
 import static com.clemble.casino.registration.RegistrationWebMapping.*;
 import static com.google.common.base.Preconditions.checkNotNull;
 
-import com.clemble.casino.error.ClembleError;
 import com.clemble.casino.registration.PlayerCredential;
 import com.clemble.casino.registration.service.PlayerRegistrationService;
 import com.clemble.casino.server.event.email.SystemEmailAddedEvent;
@@ -50,14 +49,12 @@ public class PlayerRegistrationController implements PlayerRegistrationService, 
     @Override
     public String login(PlayerCredential credentials) {
         if (!credentialManager.existsByEmail(credentials.getEmail())){
-            ClembleError failure = ClembleError.withFieldError("email", ClembleErrorCode.EmailNotRegistered);
-            throw ClembleException.fromDescription(failure);
+            throw ClembleException.withFieldError("email", ClembleErrorCode.EmailNotRegistered);
         }
         // Step 1. Processing login request
         String player = credentialManager.verifyByCredentials(credentials);
         if (player == null) {
-            ClembleError failure = ClembleError.withFieldError("password", ClembleErrorCode.PasswordIncorrect);
-            throw ClembleException.fromDescription(failure);
+            throw ClembleException.withFieldError("password", ClembleErrorCode.PasswordIncorrect);
         }
         return player;
     }
@@ -88,7 +85,7 @@ public class PlayerRegistrationController implements PlayerRegistrationService, 
         // Step 3. Adding initial fields to PlayerProfile
         PlayerProfile normalizedProfile = registrationRequest.toProfileWithPlayer(player);
         if (credentialManager.existsByNickname(normalizedProfile.getNickName()))
-            throw ClembleException.fromDescription(ClembleError.withFieldError("nickName", ClembleErrorCode.NickOccupied));
+            throw ClembleException.withFieldError("nickName", ClembleErrorCode.NickOccupied);
         // Step 4. Create new credentials
         credentialManager.save(player, registrationRequest.getEmail(), normalizedProfile.getNickName(), registrationRequest.getPassword());
         // Step 5. Generating default image redirect

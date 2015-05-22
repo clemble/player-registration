@@ -39,7 +39,7 @@ public class PlayerPasswordController implements PlayerPasswordService, ServerCo
         String player = credentialManager.findPlayerByEmail(restoreRequest.getEmail());
         // Step 2. Checking player does exists
         if (player == null)
-            throw ClembleException.fromError(ClembleErrorCode.EmailInvalid);
+            throw ClembleException.withFieldError("email", ClembleErrorCode.EmailInvalid);
         // Step 3. Generate and send email token
         tokenService.generateAndSend(player);
         // Step 4. Consider that everything done
@@ -72,7 +72,7 @@ public class PlayerPasswordController implements PlayerPasswordService, ServerCo
         // Step 1. Verifying password matches
         boolean passwordMatch = credentialManager.verifyByPassword(player, changeRequest.getOldPassword());
         if (!passwordMatch)
-            throw ClembleException.fromError(ClembleErrorCode.PasswordIncorrect);
+            throw ClembleException.withServerError(ClembleErrorCode.PasswordIncorrect);
         // Step 2. Updating password
         return credentialManager.update(player, changeRequest.getPassword()) != null;
     }
