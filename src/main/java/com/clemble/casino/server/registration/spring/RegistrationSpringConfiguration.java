@@ -137,7 +137,7 @@ public class RegistrationSpringConfiguration implements SpringConfiguration {
 
     @Configuration
     @Profile({SpringConfiguration.TEST, SpringConfiguration.DEFAULT, SpringConfiguration.INTEGRATION_TEST})
-    public static class Default implements SpringConfiguration {
+    public static class Default {
 
         @Bean
         public TextEncryptor passwordTextEncryptor() {
@@ -153,7 +153,7 @@ public class RegistrationSpringConfiguration implements SpringConfiguration {
 
     @Configuration
     @Profile(SpringConfiguration.CLOUD)
-    public static class Cloud implements SpringConfiguration {
+    public static class Cloud {
 
         @Bean
         public TextEncryptor passwordTextEncryptor(

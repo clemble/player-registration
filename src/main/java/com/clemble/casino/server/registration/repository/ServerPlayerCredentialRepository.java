@@ -8,9 +8,9 @@ import com.clemble.casino.registration.PlayerCredential;
 
 public interface ServerPlayerCredentialRepository extends MongoRepository<ServerPlayerCredential, String> {
 
-    public ServerPlayerCredential findByEmail(String email);
+    ServerPlayerCredential findByEmail(String email);
 
-    public ServerPlayerCredential findByEmailOrNickName(String email, String nickName);
+    ServerPlayerCredential findByEmailOrNickName(String email, String nickName);
 
-    public ServerPlayerCredential findByNickName(String nickName);
+    ServerPlayerCredential findByNickName(String nickName);
 }

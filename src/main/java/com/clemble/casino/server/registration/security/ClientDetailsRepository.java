@@ -6,8 +6,8 @@ import com.clemble.casino.security.ClientDetails;
 
 public interface ClientDetailsRepository {
 
-    public ClientDetails findOne(String client);
+    ClientDetails findOne(String client);
 
-    public List<ClientDetails> findByPlayer(String player);
+    List<ClientDetails> findByPlayer(String player);
 
 }

@@ -7,6 +7,6 @@ import com.clemble.casino.server.KeyGenerator;
  */
 public interface PasswordResetTokenGenerator extends KeyGenerator {
 
-    public String generate();
+    String generate();
 
 }

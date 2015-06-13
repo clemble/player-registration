@@ -43,7 +43,7 @@ public class ClembleCouchbaseConsumerDetailsService implements ClembleConsumerDe
         if (clembleConsumerDetails == null || clembleConsumerDetails.getConsumerKey() == null)
             throw new IllegalArgumentException("Invalid ClembleConsumerDetails");
         // Step 1.1 Removing private key from consumer details they must not be stored on the server
-        if (clembleConsumerDetails.getSignatureSecret().getPrivateKey() != null) {;
+        if (clembleConsumerDetails.getSignatureSecret().getPrivateKey() != null) {
             clembleConsumerDetails = new ClembleConsumerDetails(clembleConsumerDetails.getConsumerKey(), 
                     clembleConsumerDetails.getConsumerName(), 
                     new RSAKeySecret(clembleConsumerDetails.getSignatureSecret().getPublicKey()),

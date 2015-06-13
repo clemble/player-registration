@@ -43,9 +43,8 @@ public class ServerPasswordResetToken implements PlayerAware {
         ServerPasswordResetToken that = (ServerPasswordResetToken) o;
 
         if (!token.equals(that.token)) return false;
-        if (!player.equals(that.player)) return false;
+        return player.equals(that.player);
 
-        return true;
     }
 
     @Override

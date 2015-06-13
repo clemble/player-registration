@@ -60,9 +60,8 @@ public class ServerPlayerCredential implements PlayerAware, PlayerNickNameAware,
 
         if (!email.equals(that.email)) return false;
         if (!hash.equals(that.hash)) return false;
-        if (!player.equals(that.player)) return false;
+        return player.equals(that.player);
 
-        return true;
     }
 
     @Override

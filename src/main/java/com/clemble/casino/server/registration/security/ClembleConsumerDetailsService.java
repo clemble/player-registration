@@ -8,8 +8,8 @@ import org.springframework.security.oauth.provider.ConsumerDetailsService;
  */
 public interface ClembleConsumerDetailsService extends ConsumerDetailsService {
 
-    public ClembleConsumerDetails loadConsumerByConsumerKey(String consumerKey);
+    ClembleConsumerDetails loadConsumerByConsumerKey(String consumerKey);
 
-    public void save(ClembleConsumerDetails clembleConsumerDetails);
+    void save(ClembleConsumerDetails clembleConsumerDetails);
 
 }
