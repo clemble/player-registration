@@ -89,8 +89,8 @@ public class PlayerRegistrationController implements PlayerRegistrationService, 
         // Step 4. Create new credentials
         credentialManager.save(player, registrationRequest.getEmail(), normalizedProfile.getNickName(), registrationRequest.getPassword());
         // Step 5. Generating default image redirect
-        String imageRedirect = GravatarService.toRedirect(registrationRequest.getEmail());
-        notificationService.send(new SystemPlayerImageChangedEvent(player, imageRedirect, imageRedirect + "?s=48"));
+        String imageRedirect = GravatarService.toRedirect(registrationRequest.getEmail()) + "?s={height}";
+        notificationService.send(new SystemPlayerImageChangedEvent(player, imageRedirect));
 
         // Step 6. Notifying system of new user
         notificationService.send(new SystemPlayerProfileRegisteredEvent(player, normalizedProfile));
